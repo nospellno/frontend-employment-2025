@@ -1,36 +1,25 @@
-'use client';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
-import { useEffect, useState } from 'react';
-import { Pokemon } from '@interfaces/pokemon';
+const LIMIT = 20;
 
-const useFetchPokemons = (limit: number, offset: number) => {
-  const [pokemonData, setPokemonData] = useState<Pokemon[]>([]);
-  const [loading, setLoading] = useState(true);
+const fetchPokemons = async (offset: number) => {
+  const response = await fetch(`http://localhost:3000/api/pokemon?limit=${LIMIT}&offset=${offset}`);
+  if (!response.ok) {
+    throw new Error('Network Error');
+  }
+  return response.json();
+};
 
-  useEffect(() => {
-    const fetchPokemons = async () => {
-      setLoading(true);
-
-      try {
-        const response = await fetch(`http://localhost:3000/api/pokemon?limit=${limit}&offset=${offset}`);
-
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-
-        const data: Pokemon[] = await response.json();
-        setPokemonData(data);
-      } catch {
-        setPokemonData([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPokemons();
-  }, [limit, offset]);
-
-  return { pokemonData, loading };
+const useFetchPokemons = () => {
+  return useInfiniteQuery({
+    queryKey: ['pokemons'],
+    queryFn: ({ pageParam = 0 }) => fetchPokemons(pageParam),
+    getNextPageParam: (lastPage, pages) => {
+      const nextOffset = pages.length * LIMIT;
+      return lastPage.length > 0 ? nextOffset : undefined;
+    },
+    initialPageParam: 0,
+  });
 };
 
 export default useFetchPokemons;

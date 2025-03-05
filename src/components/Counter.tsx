@@ -5,10 +5,7 @@ import Button from '@shared/Button';
 import { useDarkModeStore } from '@/stores/darkModeStore';
 
 const Counter = () => {
-  const [count, setCount] = useState<number>(() => {
-    const savedCount = localStorage.getItem('count');
-    return savedCount ? JSON.parse(savedCount) : 0;
-  });
+  const [count, setCount] = useState<number>(0);
   const setDarkMode = useDarkModeStore((state) => state.setDarkMode);
 
   const handleIncrement = () => {
@@ -22,6 +19,13 @@ const Counter = () => {
       setCount(count - 1);
     }
   };
+
+  useEffect(() => {
+    const savedCount = localStorage.getItem('count');
+    if (savedCount) {
+      setCount(JSON.parse(savedCount));
+    }
+  }, []);
 
   useEffect(() => {
     setDarkMode(count >= 5);

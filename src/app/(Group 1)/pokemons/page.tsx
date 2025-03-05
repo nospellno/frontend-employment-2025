@@ -1,7 +1,7 @@
 import React from 'react';
 
 const PokemonsPage = () => {
-  return <div>PokemonsPage</div>;
+  return <div></div>;
 };
 
 export default PokemonsPage;

@@ -1,17 +1,15 @@
+'use client';
+
 import { Pokemon } from '@interfaces/pokemon';
 import Image from 'next/image';
 import React from 'react';
+import useFetchPokemons from '@hooks/useFetchPokemons';
+import Loading from '@shared/Loading';
 
-const fetchPokemons = async (limit: number, offset: number) => {
-  const response = await fetch(`http://localhost:3000/api/pokemon?limit=${limit}&offset=${offset}`);
-  if (!response.ok) {
-    throw new Error('Network response was not ok');
-  }
-  return response.json();
-};
+const PokemonList = () => {
+  const { pokemonData, loading } = useFetchPokemons(20, 0);
 
-const PokemonList = async () => {
-  const pokemonData = await fetchPokemons(20, 0);
+  if (loading) return <Loading />;
 
   return (
     <ul className="m-auto grid max-w-screen-xl grid-cols-4 gap-4 p-8 max-md:grid-cols-2">

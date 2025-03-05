@@ -23,7 +23,8 @@
       "@components/*": ["./src/components/*"],
       "@shared/*": ["./src/components/shared/*"],
       "@stores/*": ["./src/stores/*"],
-      "@interfaces/*": ["./src/interfaces/*"]
+      "@interfaces/*": ["./src/interfaces/*"],
+      "@hooks/*": ["./src/hooks/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
